@@ -1,14 +1,12 @@
 # syanten
 麻雀シャンテン向聴数計算
 
-**向聴数計算**
-
-Install with npm:
+**Install with npm:**
 ```
 $ npm i syanten
 ```
 
-Example:
+**Example:**
 ```js
 const sht = require("syanten")
 let h = [
