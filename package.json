@@ -1,22 +1,27 @@
 {
   "name": "syanten",
-  "version": "1.1.0",
-  "description": "calc syanten",
+  "version": "1.2.0",
+  "description": "Japanese riichi mahjong shanten calculation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./test.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/takayama-lily/syanten.git"
   },
   "keywords": [
+    "riichi",
     "mahjong",
     "syanten",
-    "shanten"
+    "shanten",
+    "agari",
+    "hand",
+    "calculation",
+    "Japan"
   ],
-  "author": "takayama",
-  "license": "WTFPL",
+  "author": "takayama <takayama@foxmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/takayama-lily/syanten/issues"
   },
