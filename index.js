@@ -110,25 +110,21 @@ const syanten = (haiArr)=>{
         res = tmpRes < res ? tmpRes : res
         mentsu = tatsu = alone = 0
     }
+    haiArr = JSON.parse(JSON.stringify(haiArr))
     let arr1 = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
     let s = sum(arr1)
     if (s > 14 || s % 3 === 0)
         return -2
     furo = (14 - s) / 3
-    if (s % 3 === 1) {
-        for (let i in haiArr[3]) {
-            if (haiArr[3][i] < 4) {
-                haiArr[3][i]++
-                break
-            }
-        }
-    }
     for (let i in arr1) {
         if (!arr1[i])
             continue
         let t = []
         t[0] = haiArr[0].concat(), t[1] = haiArr[1].concat(), t[2] = haiArr[2].concat(), t[3] = haiArr[3].concat()
-        t[Math.floor(i / 9)][i % 9] -= arr1[i] >= 2 ? 2 : arr1[i]
+        if (s % 3 === 1)
+            t[Math.floor(i / 9)][i % 9] -= 1
+        else
+            t[Math.floor(i / 9)][i % 9] -= arr1[i] >= 2 ? 2 : arr1[i]
         search(t[0]) && search(t[1]) && search(t[2]) && search(t[3], true) && calc()
     }
     if (res === -1 && s % 3 === 1)
@@ -159,9 +155,67 @@ const syanten13 = (haiArr)=>{
     }
     return 14 - s - t - 1
 }
-module.exports = (haiArr)=>{
-    return Math.min(syanten(haiArr), syanten7(haiArr), syanten13(haiArr))
+const syantenAll = (haiArr)=>{
+    let s7 = syanten7(haiArr)
+    let s13 = syanten13(haiArr)
+    if (s7 === -2 || s13 === -2)
+        return syanten(haiArr)
+    else
+        return Math.min(syanten(haiArr), s7, s13)
 }
+
+const MPSZ = ['m', 'p', 's', 'z']
+const hairi = (haiArr, has7or13 = true)=>{
+    let syantenCalc = has7or13 ? syantenAll : syanten
+    let sht = syantenCalc(haiArr)
+    let res = {now: sht}
+    if (sht < 0)
+        return res
+    if (sum(haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])) % 3 === 1) {
+        res.wait = {}
+        for (let i in haiArr) {
+            for (let ii in haiArr[i]) {
+                if (haiArr[i][ii] === 4)
+                    continue
+                haiArr[i][ii]++
+                if (syantenCalc(haiArr) < sht) {
+                    let kk = parseInt(ii)+1+MPSZ[i]
+                    let v = 5 - haiArr[i][ii]
+                    res.wait[kk] = v
+                }
+                haiArr[i][ii]--
+            }
+        }
+        return res
+    }
+    for (let i in haiArr) {
+        for (let ii in haiArr[i]) {
+            if (!haiArr[i][ii])
+                continue
+            haiArr[i][ii]--
+            let k = parseInt(ii)+1+MPSZ[i]
+            res[k] = {}
+            for (let iii in haiArr) {
+                for (let iiii in haiArr[iii]) {
+                    if (haiArr[iii][iiii] === 4 || (i === iii && ii === iiii))
+                        continue
+                    haiArr[iii][iiii]++
+                    if (syantenCalc(haiArr) < sht) {
+                        let kk = parseInt(iiii)+1+MPSZ[iii]
+                        let v = 5 - haiArr[iii][iiii]
+                        res[k][kk] = v
+                    }
+                    haiArr[iii][iiii]--
+                }
+            }
+            haiArr[i][ii]++
+        }
+    }
+    return res
+}
+
+module.exports = syantenAll
 module.exports.syanten = syanten
 module.exports.syanten7 = syanten7
 module.exports.syanten13 = syanten13
+module.exports.hairi = hairi

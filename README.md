@@ -1,7 +1,7 @@
 # syanten
 
-麻雀シャンテン向聴数計算  
-Japanese riichi mahjong shanten calculation
+麻雀シャンテン向聴数牌理計算  
+Japanese riichi mahjong hand shanten calculation
 
 **Install with npm:**
 
@@ -33,4 +33,64 @@ console.log(sht(h))             //全部形最小値
 -1  和了形
 0   聴牌形
 1~  向聴数
+```
+
+# 牌理計算
+
+```js
+const sht = require("syanten")
+let h = [
+    [3, 3, 3, 0, 0, 0, 0, 0, 0],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 0, 0, 0, 0]
+]
+console.log(sht.hairi(h))
+```
+
+**Output:**
+
+```js
+//手牌14,11,8,5,2枚の場合
+{
+  now: 1, //現在向聴数
+  '1m': {},
+  '2m': {},
+  '3m': {},
+  '1p': {},
+  '1z': { '1p': 2, '2z': 3, '3z': 3 }, //打1z 待1p二枚 2z三枚 3z三枚
+  '2z': { '1p': 2, '1z': 3, '3z': 3 }, //打2z 待1p二枚 1z三枚 3z三枚
+  '3z': { '1p': 2, '1z': 3, '2z': 3 }  //打3z 待1p二枚 1z三枚 2z三枚
+}
+```
+"m,p,s,z" means "萬子,筒子,索子,字牌"  
+"1z-7z" means "東南西北白發中"
+
+**手牌13,10,7,4,1枚の場合**
+
+```js
+const sht = require("syanten")
+let h = [
+    [3, 3, 3, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 0, 0, 0, 0]
+]
+console.log(sht.hairi(h))
+```
+
+**Output:**
+
+```js
+//手牌13,10,7,4,1枚の場合
+{
+  now: 2, //現在向聴数
+  wait: {'1p': 3, '2p': 4, '3p': 4, '1z': 3, '2z': 3, '3z': 3 } //待1p三枚 2p四枚 3p四枚 1z三枚 2z三枚 3z三枚
+}
+```
+
+**七対&国士排除**
+
+```js
+sht.hairi(h, false)
 ```
