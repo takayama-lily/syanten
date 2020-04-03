@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) https://github.com/takayama-lily/syanten
+ */
 'use strict'
 const sum = (arr)=>{
     let s = 0
@@ -127,8 +130,6 @@ const syanten = (haiArr)=>{
             t[Math.floor(i / 9)][i % 9] -= arr[i] >= 2 ? 2 : arr[i]
         search(t[0]) && search(t[1]) && search(t[2]) && search(t[3], true) && calc()
     }
-    if (res === -1 && s % 3 === 1)
-        res = 0
     return res + (s % 3 === 1)
 }
 const syanten7 = (haiArr)=>{

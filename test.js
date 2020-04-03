@@ -1012,6 +1012,7 @@ for (let v of arr) {
     cases.push(o)
 }
 let error = 0
+console.time()
 for (let v of cases) {
     try {
         assert.deepStrictEqual(test.syanten(v.input), v.expect)
@@ -1020,4 +1021,5 @@ for (let v of cases) {
         console.log(v.input, v.expect, e.message)
     }
 }
+console.timeEnd()
 console.log('Error:', error, '/ 1000')
