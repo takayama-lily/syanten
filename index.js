@@ -11,12 +11,6 @@ const syanten = (haiArr)=>{
     let res = 9
     let mentsu, tatsu, alone, furo
     mentsu = tatsu = alone = furo = 0
-    haiArr = JSON.parse(JSON.stringify(haiArr))
-    let arr = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
-    let s = sum(arr)
-    if (s > 14 || s % 3 === 0)
-        return -2
-    furo = (14 - s) / 3
     const search = (arr, isJihai)=>{
         let arr2 = arr.concat()
         let tmp1 = [0, 0, 0]
@@ -115,22 +109,34 @@ const syanten = (haiArr)=>{
                 alone -= 2, mentsu++, tmpRes += 2
             }
         }
-        if (alone && s % 3 !== 1) tmpRes++
+        if (alone) tmpRes++
         res = tmpRes < res ? tmpRes : res
         mentsu = tatsu = alone = 0
+    }
+    haiArr = JSON.parse(JSON.stringify(haiArr))
+    let arr = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
+    let s = sum(arr)
+    if (s > 14 || s % 3 === 0)
+        return -2
+    furo = Math.round((14 - s) / 3)
+    if (s % 3 === 1) {
+        for (let i = 33;;i--) {
+            if (!arr[i]) {
+                arr[i]++
+                haiArr[Math.floor(i / 9)][i % 9]++
+                break
+            }
+        }
     }
     for (let i in arr) {
         if (!arr[i])
             continue
         let t = []
         t[0] = haiArr[0].concat(), t[1] = haiArr[1].concat(), t[2] = haiArr[2].concat(), t[3] = haiArr[3].concat()
-        if (s % 3 === 1)
-            t[Math.floor(i / 9)][i % 9] -= 1
-        else
-            t[Math.floor(i / 9)][i % 9] -= arr[i] >= 2 ? 2 : arr[i]
+        t[Math.floor(i / 9)][i % 9] -= arr[i] >= 2 ? 2 : arr[i]
         search(t[0]) && search(t[1]) && search(t[2]) && search(t[3], true) && calc()
     }
-    return res + (s % 3 === 1)
+    return res
 }
 const syanten7 = (haiArr)=>{
     let v = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
