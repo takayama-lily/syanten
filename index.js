@@ -176,8 +176,6 @@ const hairi = (haiArr, has7or13 = true)=>{
         res.wait = {}
         for (let i in haiArr) {
             for (let ii in haiArr[i]) {
-                if (haiArr[i][ii] === 4)
-                    continue
                 haiArr[i][ii]++
                 if (syantenCalc(haiArr) < sht) {
                     let kk = parseInt(ii)+1+MPSZ[i]
@@ -194,11 +192,15 @@ const hairi = (haiArr, has7or13 = true)=>{
             if (!haiArr[i][ii])
                 continue
             haiArr[i][ii]--
+            if (syantenCalc(haiArr) > sht) {
+                haiArr[i][ii]++
+                continue
+            }
             let k = parseInt(ii)+1+MPSZ[i]
             res[k] = {}
             for (let iii in haiArr) {
                 for (let iiii in haiArr[iii]) {
-                    if (haiArr[iii][iiii] === 4 || (i === iii && ii === iiii))
+                    if (i === iii && ii === iiii)
                         continue
                     haiArr[iii][iiii]++
                     if (syantenCalc(haiArr) < sht) {
