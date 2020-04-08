@@ -142,11 +142,17 @@ const syanten7 = (haiArr)=>{
     let v = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
     if (sum(v) < 13 || sum(v) > 14)
         return -2
-    let s = 0
-    for (let i in v)
+    let s = 0, t = 0
+    for (let i in v) {
         if (v[i] >= 2)
             s++
-    return 7 - s - 1
+        if (v[i] === 1)
+            t++
+    }
+    if (s + t >= 7)
+        return 6 - s
+    else
+        return 6 - s + (7 - s - t)
 }
 const syanten13 = (haiArr)=>{
     let v = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
@@ -160,7 +166,7 @@ const syanten13 = (haiArr)=>{
         if (v[i] > 1)
             t = 1
     }
-    return 14 - s - t - 1
+    return 13 - s - t 
 }
 const syantenAll = (haiArr)=>{
     let s7 = syanten7(haiArr)
