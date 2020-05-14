@@ -178,25 +178,37 @@ const syantenAll = (haiArr)=>{
 }
 
 const MPSZ = ['m', 'p', 's', 'z']
-const hairi = (haiArr, has7or13 = true)=>{
-    let syantenCalc = has7or13 ? syantenAll : syanten
+const hairi = (haiArr, is7or13 = false)=>{
+    let syantenCalc = !is7or13 ? syanten : (haiArr)=>{
+        return Math.min(syanten7(haiArr), syanten13(haiArr))
+    }
     let sht = syantenCalc(haiArr)
     let res = {now: sht}
     if (sht < 0)
-        return res
-    if (sum(haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])) % 3 === 1) {
-        res.wait = {}
+        return 
+    let self = []
+    const calcHairi = ()=>{
+        let map = {}
         for (let i in haiArr) {
             for (let ii in haiArr[i]) {
+                if (i === self[0] && ii === self[1])
+                    continue
+                if (!is7or13 && i == 3 && !haiArr[i][ii])
+                    continue
+                ii = parseInt(ii)
+                if (!is7or13 && i < 3 && (!haiArr[i][ii] && !haiArr[i][ii-1] && !haiArr[i][ii-2] && !haiArr[i][ii+1] && !haiArr[i][ii+1]))
+                    continue
                 haiArr[i][ii]++
                 if (syantenCalc(haiArr) < sht) {
-                    let kk = parseInt(ii)+1+MPSZ[i]
-                    let v = 5 - haiArr[i][ii]
-                    res.wait[kk] = v
+                    map[parseInt(ii)+1+MPSZ[i]] = 5 - haiArr[i][ii]
                 }
                 haiArr[i][ii]--
             }
         }
+        return map
+    }
+    if ((sum(haiArr[0]) + sum(haiArr[1]) + sum(haiArr[2]) + sum(haiArr[3])) % 3 === 1) {
+        res.wait = calcHairi()
         return res
     }
     for (let i in haiArr) {
@@ -204,24 +216,9 @@ const hairi = (haiArr, has7or13 = true)=>{
             if (!haiArr[i][ii])
                 continue
             haiArr[i][ii]--
-            if (syantenCalc(haiArr) > sht) {
-                haiArr[i][ii]++
-                continue
-            }
-            let k = parseInt(ii)+1+MPSZ[i]
-            res[k] = {}
-            for (let iii in haiArr) {
-                for (let iiii in haiArr[iii]) {
-                    if (i === iii && ii === iiii)
-                        continue
-                    haiArr[iii][iiii]++
-                    if (syantenCalc(haiArr) < sht) {
-                        let kk = parseInt(iiii)+1+MPSZ[iii]
-                        let v = 5 - haiArr[iii][iiii]
-                        res[k][kk] = v
-                    }
-                    haiArr[iii][iiii]--
-                }
+            if (syantenCalc(haiArr) === sht) {
+                self = [i, ii]
+                res[parseInt(ii)+1+MPSZ[i]] = calcHairi()
             }
             haiArr[i][ii]++
         }
