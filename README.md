@@ -35,7 +35,7 @@ console.log(sht(h))             //全部形最小値
 1~  向聴数
 ```
 
-# 牌理計算
+# 一般型牌理計算
 
 ```js
 const sht = require("syanten")
@@ -89,8 +89,8 @@ console.log(sht.hairi(h))
 }
 ```
 
-**七対&国士排除**
+**七対&国士牌理**
 
 ```js
-sht.hairi(h, false)
+sht.hairi(h, true)
 ```

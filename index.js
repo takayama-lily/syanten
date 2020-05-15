@@ -4,55 +4,51 @@
 'use strict'
 const sum = (arr)=>{
     let s = 0
-    for (let i in arr) s += arr[i]
+    for (let v of arr)
+        s += v
     return s
 }
 const syanten = (haiArr)=>{
     let res = 9
     let mentsu, tatsu, alone, furo
     mentsu = tatsu = alone = furo = 0
-    const search = (arr, isJihai)=>{
-        let arr2 = arr.concat()
+    const search = (arr, isJihai = false)=>{
         let tmp1 = [0, 0, 0]
         let tmp2 = [0, 0, 0]
         {
-            let arr1 = arr.concat()
+            let arr1 = [...arr]
             let tmpMentsu = 0
             let tmpTatsu = 0
             let tmpAlone = 0
             for (let i in arr1) {
                 i = parseInt(i)
-                if (!arr1[i]) {
+                if (arr1[i] === 0)
                     continue
-                } else if (arr1[i] == 3) {
+                if (arr1[i] >= 3)
                     arr1[i] -= 3, tmpMentsu++
-                    continue
-                } else {
-                    if (arr1[i] == 4) {
-                        arr1[i] -= 3, tmpMentsu++
-                    }
+                if (arr1[i] > 0) {
                     if (isJihai) continue
-                    if (arr1[i + 1] && arr1[i + 2]) {
+                    if (arr1[i + 1] > 0 && arr1[i + 2] > 0) {
                         arr1[i]--, arr1[i + 1]--, arr1[i + 2]--, tmpMentsu++
                     }
-                    if (arr1[i] && arr1[i + 1] && arr1[i + 2]) {
+                    if (arr1[i] > 0 && arr1[i + 1] > 0 && arr1[i + 2] > 0) {
                         arr1[i]--, arr1[i + 1]--, arr1[i + 2]--, tmpMentsu++
                     }
                 }
             }
             for (let i in arr1) {
                 i = parseInt(i)
-                if (!arr1[i]) {
+                if (arr1[i] === 0) {
                     continue
-                } else if (arr1[i] == 2) {
+                } else if (arr1[i] === 2) {
                     arr1[i] -= 2, tmpTatsu++
                     continue
                 } else {
                     if (isJihai) continue
-                    if (arr1[i + 1]) {
+                    if (arr1[i + 1] > 0) {
                         arr1[i]--, arr1[i + 1]--, tmpTatsu++
                     }
-                    if (arr1[i + 2]) {
+                    if (arr1[i + 2] > 0) {
                         arr1[i]--, arr1[i + 2]--, tmpTatsu++
                     }
                 }
@@ -60,7 +56,7 @@ const syanten = (haiArr)=>{
             tmpAlone += sum(arr1)
             tmp1 = [tmpMentsu, tmpTatsu, tmpAlone]
         } {
-            let arr2 = arr.concat()
+            let arr2 = [...arr]
             let tmpMentsu = 0
             let tmpTatsu = 0
             let tmpAlone = 0
@@ -77,14 +73,14 @@ const syanten = (haiArr)=>{
                 if (arr2[i] === 3 || arr2[i] === 4)
                     arr2[i] -= 3, tmpMentsu++
                 if (arr2[i] === 2)
-                    arr2[i] -=2, tmpTatsu++
+                    arr2[i] -= 2, tmpTatsu++
                 if (isJihai)
                     continue
-                if (arr2[i] && arr2[i + 1] && arr2[i + 2])
+                if (arr2[i] > 0 && arr2[i + 1] > 0 && arr2[i + 2] > 0)
                     arr2[i]--, arr2[i + 1]--, arr2[i + 2]--, tmpMentsu++
-                if (arr2[i] && arr2[i + 1])
+                if (arr2[i] > 0 && arr2[i + 1] > 0)
                     arr2[i]--, arr2[i + 1]--, tmpTatsu++
-                if (arr2[i] && arr2[i + 2])
+                if (arr2[i] > 0 && arr2[i + 2] > 0)
                     arr2[i]--, arr2[i + 2]--, tmpTatsu++
             }
             tmpAlone += sum(arr2)
@@ -109,12 +105,12 @@ const syanten = (haiArr)=>{
                 alone -= 2, mentsu++, tmpRes += 2
             }
         }
-        if (alone) tmpRes++
+        if (alone > 0) tmpRes++
         res = tmpRes < res ? tmpRes : res
         mentsu = tatsu = alone = 0
     }
-    haiArr = JSON.parse(JSON.stringify(haiArr))
-    let arr = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
+    haiArr = [[...haiArr[0]], [...haiArr[1]], [...haiArr[2]], [...haiArr[3]]]
+    let arr = [...haiArr[0], ...haiArr[1], ...haiArr[2], ...haiArr[3]]
     let s = sum(arr)
     if (s > 14 || s % 3 === 0)
         return -2
@@ -132,22 +128,21 @@ const syanten = (haiArr)=>{
         if (!arr[i])
             continue
         let t = []
-        t[0] = haiArr[0].concat(), t[1] = haiArr[1].concat(), t[2] = haiArr[2].concat(), t[3] = haiArr[3].concat()
+        t[0] = [...haiArr[0]], t[1] = [...haiArr[1]], t[2] = [...haiArr[2]], t[3] = [...haiArr[3]]
         t[Math.floor(i / 9)][i % 9] -= arr[i] >= 2 ? 2 : arr[i]
         search(t[0]) && search(t[1]) && search(t[2]) && search(t[3], true) && calc()
     }
     return res
 }
 const syanten7 = (haiArr)=>{
-    let v = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
-    if (sum(v) < 13 || sum(v) > 14)
+    let cnt = sum(haiArr[0]) + sum(haiArr[1]) + sum(haiArr[2]) + sum(haiArr[3])
+    if (cnt < 13 || cnt > 14)
         return -2
+    let v = [...haiArr[0], ...haiArr[1], ...haiArr[2], ...haiArr[3]]
     let s = 0, t = 0
     for (let i in v) {
-        if (v[i] >= 2)
-            s++
-        if (v[i] === 1)
-            t++
+        if (v[i] >= 2) s++
+        if (v[i] === 1) t++
     }
     if (s + t >= 7)
         return 6 - s
@@ -155,16 +150,14 @@ const syanten7 = (haiArr)=>{
         return 6 - s + (7 - s - t)
 }
 const syanten13 = (haiArr)=>{
-    let v = haiArr[0].concat(haiArr[1]).concat(haiArr[2]).concat(haiArr[3])
-    if (sum(v) < 13 || sum(v) > 14)
+    let cnt = sum(haiArr[0]) + sum(haiArr[1]) + sum(haiArr[2]) + sum(haiArr[3])
+    if (cnt < 13 || cnt > 14)
         return -2
-    v = [haiArr[0][0], haiArr[0][8], haiArr[1][0], haiArr[1][8], haiArr[2][0], haiArr[2][8]].concat(haiArr[3])
-    let s = 0
-    let t = 0
+    let v = [haiArr[0][0], haiArr[0][8], haiArr[1][0], haiArr[1][8], haiArr[2][0], haiArr[2][8], ...haiArr[3]]
+    let s = 0, t = 0
     for (let i in v) {
         if (v[i]) s++
-        if (v[i] > 1)
-            t = 1
+        if (v[i] > 1) t = 1
     }
     return 13 - s - t 
 }

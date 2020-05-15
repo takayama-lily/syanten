@@ -1022,4 +1022,4 @@ for (let v of cases) {
     }
 }
 console.timeEnd()
-console.log('Error:', error, '/ 1000')
+console.log('Error:', error, '/', cases.length)
