@@ -1,6 +1,6 @@
 {
   "name": "syanten",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Japanese riichi mahjong hand shanten calculation",
   "main": "index.js",
   "scripts": {

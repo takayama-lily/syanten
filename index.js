@@ -4,8 +4,8 @@
 'use strict'
 const sum = (arr)=>{
     let s = 0
-    for (let v of arr)
-        s += v
+    for (let i = 0; i < arr.length; i++)
+        s += arr[i]
     return s
 }
 const syanten = (haiArr)=>{
@@ -20,9 +20,8 @@ const syanten = (haiArr)=>{
             let tmpMentsu = 0
             let tmpTatsu = 0
             let tmpAlone = 0
-            for (let i in arr1) {
-                i = parseInt(i)
-                if (arr1[i] === 0)
+            for (let i = 0; i < 9; i++) {
+                if (arr1[i] === 0 || arr1[i] === undefined)
                     continue
                 if (arr1[i] >= 3)
                     arr1[i] -= 3, tmpMentsu++
@@ -36,9 +35,8 @@ const syanten = (haiArr)=>{
                     }
                 }
             }
-            for (let i in arr1) {
-                i = parseInt(i)
-                if (arr1[i] === 0) {
+            for (let i = 0; i < 9; i++) {
+                if (arr1[i] === 0 || arr1[i] === undefined) {
                     continue
                 } else if (arr1[i] === 2) {
                     arr1[i] -= 2, tmpTatsu++
@@ -60,9 +58,8 @@ const syanten = (haiArr)=>{
             let tmpMentsu = 0
             let tmpTatsu = 0
             let tmpAlone = 0
-            for (let i in arr2) {
-                i = parseInt(i)
-                if (!arr2[i])
+            for (let i = 0; i < 9; i++) {
+                if (arr2[i] === 0 || arr2[i] === undefined)
                     continue
                 if (!isJihai) {
                     if (arr2[i] >= 2 && arr2[i + 1] >= 2 && arr2[i + 2] >= 2)
@@ -124,8 +121,8 @@ const syanten = (haiArr)=>{
             }
         }
     }
-    for (let i in arr) {
-        if (!arr[i])
+    for (let i = 0; i < 34; i++) {
+        if (arr[i] === 0)
             continue
         let t = []
         t[0] = [...haiArr[0]], t[1] = [...haiArr[1]], t[2] = [...haiArr[2]], t[3] = [...haiArr[3]]
@@ -140,7 +137,7 @@ const syanten7 = (haiArr)=>{
         return -2
     let v = [...haiArr[0], ...haiArr[1], ...haiArr[2], ...haiArr[3]]
     let s = 0, t = 0
-    for (let i in v) {
+    for (let i = 0; i < 34; i++) {
         if (v[i] >= 2) s++
         if (v[i] === 1) t++
     }
@@ -155,7 +152,7 @@ const syanten13 = (haiArr)=>{
         return -2
     let v = [haiArr[0][0], haiArr[0][8], haiArr[1][0], haiArr[1][8], haiArr[2][0], haiArr[2][8], ...haiArr[3]]
     let s = 0, t = 0
-    for (let i in v) {
+    for (let i = 0; i < 13; i++) {
         if (v[i]) s++
         if (v[i] > 1) t = 1
     }
@@ -178,22 +175,23 @@ const hairi = (haiArr, is7or13 = false)=>{
     let sht = syantenCalc(haiArr)
     let res = {now: sht}
     if (sht < 0)
-        return 
+        return res
     let self = []
     const calcHairi = ()=>{
         let map = {}
-        for (let i in haiArr) {
-            for (let ii in haiArr[i]) {
+        for (let i = 0; i < 4; i++) {
+            for (let ii = 0; ii < 9; ii++) {
+                if (haiArr[i][ii] === undefined)
+                    continue
                 if (i === self[0] && ii === self[1])
                     continue
-                if (!is7or13 && i == 3 && !haiArr[i][ii])
+                if (!is7or13 && i == 3 && haiArr[i][ii] === 0)
                     continue
-                ii = parseInt(ii)
-                if (!is7or13 && i < 3 && (!haiArr[i][ii] && !haiArr[i][ii-1] && !haiArr[i][ii-2] && !haiArr[i][ii+1] && !haiArr[i][ii+1]))
+                if (!is7or13 && i < 3 && (haiArr[i][ii] === 0 && !haiArr[i][ii-1] === 0 && !haiArr[i][ii-2] === 0 && !haiArr[i][ii+1] === 0 && !haiArr[i][ii+1] === 0))
                     continue
                 haiArr[i][ii]++
                 if (syantenCalc(haiArr) < sht) {
-                    map[parseInt(ii)+1+MPSZ[i]] = 5 - haiArr[i][ii]
+                    map[ii+1+MPSZ[i]] = 5 - haiArr[i][ii]
                 }
                 haiArr[i][ii]--
             }
@@ -204,14 +202,14 @@ const hairi = (haiArr, is7or13 = false)=>{
         res.wait = calcHairi()
         return res
     }
-    for (let i in haiArr) {
-        for (let ii in haiArr[i]) {
-            if (!haiArr[i][ii])
+    for (let i = 0; i < 4; i++) {
+        for (let ii = 0; ii < 9; ii++) {
+            if (haiArr[i][ii] === 0 || haiArr[i][ii] === undefined)
                 continue
             haiArr[i][ii]--
             if (syantenCalc(haiArr) === sht) {
                 self = [i, ii]
-                res[parseInt(ii)+1+MPSZ[i]] = calcHairi()
+                res[ii+1+MPSZ[i]] = calcHairi()
             }
             haiArr[i][ii]++
         }
