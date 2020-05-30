@@ -1,51 +1,58 @@
-# syanten
+# **syanten**
 
 麻雀シャンテン向聴数牌理計算  
 Japanese riichi mahjong hand shanten calculation
 
 **Install with npm:**
 
+```shell
+# npm i syanten
 ```
-$ npm i syanten
+
+**Use in browser:**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/syanten"></script>
 ```
 
 **Example:**
 
 ```js
-const sht = require("syanten")
-//手牌可能数: 14,13, 11,10, 8,7, 5,4, 2,1
-let h = [
+const syanten = require('syanten')
+let hai = [
     [4, 1, 1, 1, 1, 1, 1, 1, 3], //萬子
     [0, 0, 0, 0, 0, 0, 0, 0, 0], //筒子
     [0, 0, 0, 0, 0, 0, 0, 0, 0], //索子
     [0, 0, 0, 0, 0, 0, 0]        //字牌
 ]
-console.log(sht.syanten(h))     //一般形
-console.log(sht.syanten7(h))    //七対子形
-console.log(sht.syanten13(h))   //国士形
-console.log(sht(h))             //全部形最小値
+console.log(syanten.syanten(hai))     //一般形
+console.log(syanten.syanten7(hai))    //七対子形
+console.log(syanten.syanten13(hai))   //国士形
+console.log(syanten(hai))             //全部形最小値
+
+//手牌可能枚数: 14,13, 11,10, 8,7, 5,4, 2,1
 ```
 
 **Output:**
 
-```
+```text
 -2  牌数不正
 -1  和了形
 0   聴牌形
 1~  向聴数
 ```
 
-# 一般型牌理計算
+## 一般型牌理計算
 
 ```js
-const sht = require("syanten")
-let h = [
+const syanten = require('syanten')
+let hai = [
     [3, 3, 3, 0, 0, 0, 0, 0, 0],
     [2, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 1, 1, 0, 0, 0, 0]
 ]
-console.log(sht.hairi(h))
+console.log(syanten.hairi(hai))
 ```
 
 **Output:**
@@ -63,20 +70,19 @@ console.log(sht.hairi(h))
   '3z': { '1p': 2, '1z': 3, '2z': 3 }  //打3z 待1p二枚 1z三枚 2z三枚
 }
 ```
+
 "m,p,s,z" means "萬子,筒子,索子,字牌"  
 "1z-7z" means "東南西北白發中"
 
-**手牌13,10,7,4,1枚の場合**
-
 ```js
-const sht = require("syanten")
-let h = [
+//手牌13,10,7,4,1枚の場合
+let hai = [
     [3, 3, 3, 0, 0, 0, 0, 0, 0],
     [1, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 1, 1, 0, 0, 0, 0]
 ]
-console.log(sht.hairi(h))
+console.log(syanten.hairi(hai))
 ```
 
 **Output:**
@@ -89,8 +95,14 @@ console.log(sht.hairi(h))
 }
 ```
 
-**七対&国士牌理**
+## 七対&国士牌理計算
 
 ```js
-sht.hairi(h, true)
+let hai = [
+    [2, 2, 2, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [2, 2, 1, 1, 1, 0, 0]
+]
+console.log(syanten.hairi(hai, true))
 ```
