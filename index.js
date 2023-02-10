@@ -14,79 +14,72 @@
         let mentsu, tatsu, alone, furo
         mentsu = tatsu = alone = furo = 0
         const search = (arr, is_jihai = false)=>{
-            let tmp1 = [0, 0, 0]
-            let tmp2 = [0, 0, 0]
-            {
-                let arr1 = [...arr]
-                let tmp_mentsu = 0
-                let tmp_tatsu = 0
-                let tmp_alone = 0
-                for (let i = 0; i < 9; i++) {
-                    if (arr1[i] === 0 || arr1[i] === undefined)
-                        continue
-                    if (arr1[i] >= 3)
-                        arr1[i] -= 3, tmp_mentsu++
-                    if (arr1[i] > 0) {
-                        if (is_jihai) continue
-                        if (arr1[i + 1] > 0 && arr1[i + 2] > 0) {
-                            arr1[i]--, arr1[i + 1]--, arr1[i + 2]--, tmp_mentsu++
-                        }
-                        if (arr1[i] > 0 && arr1[i + 1] > 0 && arr1[i + 2] > 0) {
-                            arr1[i]--, arr1[i + 1]--, arr1[i + 2]--, tmp_mentsu++
-                        }
+            const searchHelper = (arr,index,is_jihai =false,mentsu,tatsu,alone) => {
+                let tmp = [0,0,0]
+                let max = [mentsu,tatsu,alone]
+                if (index === (is_jihai ? 7 : 9)){
+                    return max;
+                }
+                if (arr[index] === 0){
+                    tmp = searchHelper(arr,index+1,is_jihai,mentsu,tatsu,alone)
+                    if (tmp > max){
+                        max = tmp
                     }
                 }
-                for (let i = 0; i < 9; i++) {
-                    if (arr1[i] === 0 || arr1[i] === undefined) {
-                        continue
-                    } else if (arr1[i] === 2) {
-                        arr1[i] -= 2, tmp_tatsu++
-                        continue
-                    } else {
-                        if (is_jihai) continue
-                        if (arr1[i + 1] > 0) {
-                            arr1[i]--, arr1[i + 1]--, tmp_tatsu++
+                if (arr[index] >= 3){
+                    arr[index] -= 3
+                    tmp = searchHelper(arr,index,is_jihai,mentsu+1,tatsu,alone)
+                    if (tmp > max){
+                        max = tmp
+                    }
+                    arr[index] += 3
+                }
+                if (arr[index] >= 2){
+                    arr[index] -= 2
+                    tmp = searchHelper(arr,index,is_jihai,mentsu,tatsu+1,alone)
+                    if (tmp > max){
+                        max = tmp
+                    }
+                    arr[index] += 2
+                }
+                if (arr[index] >= 1){
+                    arr[index] -= 1
+                    tmp = searchHelper(arr,index,is_jihai,mentsu,tatsu,alone+1)
+                    if (tmp > max){
+                        max = tmp
+                    }
+                    arr[index] += 1
+                }
+                if (!is_jihai){
+                    if (arr[index] > 0 && arr[index + 1] > 0 && arr[index + 2] > 0){
+                        arr[index]--, arr[index + 1]--, arr[index + 2]--
+                        tmp = searchHelper(arr,index,is_jihai,mentsu+1,tatsu,alone)
+                        if (tmp > max){
+                            max = tmp
                         }
-                        if (arr1[i + 2] > 0) {
-                            arr1[i]--, arr1[i + 2]--, tmp_tatsu++
+                        arr[index]++, arr[index + 1]++, arr[index + 2]++
+                    }
+                    if (arr[index] > 0 && arr[index + 2] > 0){
+                        arr[index]--, arr[index + 2]--
+                        tmp = searchHelper(arr,index,is_jihai,mentsu,tatsu+1,alone)
+                        if (tmp > max){
+                            max = tmp
                         }
+                        arr[index]++, arr[index + 2]++
+                    }
+                    if (arr[index] > 0 && arr[index + 1] > 0){
+                        arr[index]--, arr[index + 1]--
+                        tmp = searchHelper(arr,index,is_jihai,mentsu,tatsu+1,alone)
+                        if (tmp > max){
+                            max = tmp
+                        }
+                        arr[index]++, arr[index + 1]++
                     }
                 }
-                tmp_alone += sum(arr1)
-                tmp1 = [tmp_mentsu, tmp_tatsu, tmp_alone]
-            } {
-                let arr2 = [...arr]
-                let tmp_mentsu = 0
-                let tmp_tatsu = 0
-                let tmp_alone = 0
-                for (let i = 0; i < 9; i++) {
-                    if (arr2[i] === 0 || arr2[i] === undefined)
-                        continue
-                    if (!is_jihai) {
-                        if (arr2[i] >= 2 && arr2[i + 1] >= 2 && arr2[i + 2] >= 2)
-                            arr2[i] -= 2, arr2[i + 1] -= 2, arr2[i + 2] -= 2, tmp_mentsu += 2
-                        if (arr2[i] >= 2 && arr2[i + 1] >= 2 && arr2[i + 2] >= 2)
-                            arr2[i] -= 2, arr2[i + 1] -= 2, arr2[i + 2] -= 2, tmp_mentsu += 2
-                    }
-                    if (arr2[i] === 3 || arr2[i] === 4)
-                        arr2[i] -= 3, tmp_mentsu++
-                    if (arr2[i] === 2)
-                        arr2[i] -= 2, tmp_tatsu++
-                    if (is_jihai)
-                        continue
-                    if (arr2[i] > 0 && arr2[i + 1] > 0 && arr2[i + 2] > 0)
-                        arr2[i]--, arr2[i + 1]--, arr2[i + 2]--, tmp_mentsu++
-                    if (arr2[i] > 0 && arr2[i + 1] > 0)
-                        arr2[i]--, arr2[i + 1]--, tmp_tatsu++
-                    if (arr2[i] > 0 && arr2[i + 2] > 0)
-                        arr2[i]--, arr2[i + 2]--, tmp_tatsu++
-                }
-                tmp_alone += sum(arr2)
-                tmp2 = [tmp_mentsu, tmp_tatsu, tmp_alone]
+                return max
             }
-            let tmp = tmp1 >= tmp2 ? tmp1 : tmp2
+            let tmp = searchHelper(arr,0,is_jihai,0,0,0)
             mentsu += tmp[0], tatsu += tmp[1], alone += tmp[2]
-            return true
         }
         const calc = ()=>{
             let tmp_res = -1
@@ -128,7 +121,11 @@
             let t = []
             t[0] = [...hai_arr[0]], t[1] = [...hai_arr[1]], t[2] = [...hai_arr[2]], t[3] = [...hai_arr[3]]
             t[Math.floor(i / 9)][i % 9] -= arr[i] >= 2 ? 2 : arr[i]
-            search(t[0]) && search(t[1]) && search(t[2]) && search(t[3], true) && calc()
+            search(t[0])
+            search(t[1])
+            search(t[2])
+            search(t[3], true)
+            calc()
         }
         return res
     }
